@@ -1,22 +1,734 @@
-<!doctype html>
-<html lang="en" class="scroll-smooth dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Samuel Mola | Software Engineering Student and Full-Stack Developer</title>
-    <meta name="description" content="Portfolio of Samuel Mola, Software Engineering student building web, mobile, and machine learning applications." />
-    <meta property="og:title" content="Samuel Mola | Portfolio" />
-    <meta property="og:description" content="Building web, mobile, and machine learning applications through code." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" href="/assets/aistudio/image_9f152f1c.png" type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body class="font-sans antialiased selection:bg-orange-500 selection:text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samuel Mola | Software Engineering Student & Full-Stack Developer</title>
+  <meta name="description" content="Portfolio of Samuel Mola Gobana, Software Engineering student building web, mobile, and machine learning systems.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg2: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #ea580c;
+    }
+    .dark {
+      --bg: #090d16;
+      --bg2: #0f172a;
+      --card: #131b2e;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --accent: #f97316;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .code-bg-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .dark .code-bg-canvas {
+      opacity: 0.28;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+      position: relative;
+      z-index: 10;
+    }
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.15rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+    }
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff !important;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      background: #c2410c;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.875rem;
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      border-color: rgba(249, 115, 22, 0.4);
+    }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="dark selection:bg-orange-500 selection:text-white">
+
+  <!-- Code Matrix Canvas Background -->
+  <canvas id="codeCanvas" class="code-bg-canvas"></canvas>
+
+  <!-- Navigation Bar -->
+  <header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b border-[var(--border)]" style="background: rgba(9, 13, 22, 0.85);">
+    <div class="wrap flex items-center justify-between py-3">
+      <a href="#home" class="font-heading font-extrabold text-xl tracking-tight text-white flex items-center gap-1">
+        Dev<span class="text-orange-500">Samuel</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <a href="#home" class="hover:text-orange-400 transition-colors">Home</a>
+        <a href="#about" class="hover:text-orange-400 transition-colors">About</a>
+        <a href="#skills" class="hover:text-orange-400 transition-colors">Skills</a>
+        <a href="#projects" class="hover:text-orange-400 transition-colors">Projects</a>
+        <a href="#education" class="hover:text-orange-400 transition-colors">Education</a>
+        <a href="#contact" class="hover:text-orange-400 transition-colors">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="themeBtn" class="btn text-xs py-1.5 px-3">Light</button>
+        <a href="#contact" class="btn btn-primary text-xs py-1.5 px-4 hidden sm:inline-flex">Hire Me</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-20">
+
+    <!-- Hero Section -->
+    <section id="home" class="py-20 md:py-28">
+      <div class="wrap grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+        <div class="md:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border border-orange-500/30 bg-orange-500/10 text-orange-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Software Engineering Student & Developer
+          </div>
+          <h1 class="text-4xl sm:text-6xl font-extrabold font-heading tracking-tight text-white leading-tight">
+            Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">Samuel Mola</span>
+          </h1>
+          <p class="text-lg text-slate-300 leading-relaxed max-w-xl">
+            Passionate software engineering student building scalable web, mobile, and machine learning systems. Focused on clean architecture, university campus automation, and predictive data systems.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#projects" class="btn btn-primary">View University Projects</a>
+            <button onclick="openModal('resumeModal')" class="btn">View Resume</button>
+            <a href="#contact" class="btn">Contact Me</a>
+          </div>
+        </div>
+
+        <div class="md:col-span-5 flex justify-center">
+          <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full p-2 border-2 border-orange-500/40 shadow-2xl shadow-orange-500/10 bg-gradient-to-tr from-orange-500/20 to-transparent">
+            <img 
+              id="profileImg"
+              src="https://ais-pre-3hb5qxdtypuqaqzwbvcl43-586269364845.europe-west3.run.app/assets/aistudio/image_9f152f1c.png" 
+              alt="Samuel Mola" 
+              class="w-full h-full object-cover rounded-full border border-slate-700"
+              onerror="this.src='https://ui-avatars.com/api/?name=Samuel+Mola&size=300&background=ea580c&color=fff'"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 border-t border-[var(--border)]" style="background: var(--bg2);">
+      <div class="wrap">
+        <p class="kicker">Background</p>
+        <h2 class="h2 text-white">About Me</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card md:col-span-2 space-y-4">
+            <p class="text-slate-300 leading-relaxed">
+              I am a dedicated Software Engineering student pursuing a BSc at the University College of Computing & Software Engineering. I combine strong foundational computer science principles—algorithms, data structures, and object-oriented design—with modern production web and mobile frameworks.
+            </p>
+            <p class="text-slate-300 leading-relaxed">
+              My flagship campus systems include the <strong>University Lost and Found System</strong> (solving real lost belongings retrieval through role-based access and verification) and the <strong>Students Performance Prediction</strong> system (leveraging machine learning to predict student GPA and tutoring needs).
+            </p>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-white text-lg">Quick Facts</h3>
+            <ul class="text-sm space-y-2 text-slate-300">
+              <li>📍 <strong>Location:</strong> Ethiopia</li>
+              <li>🎓 <strong>Degree:</strong> BSc Software Engineering</li>
+              <li>📅 <strong>Timeline:</strong> 2022 – 2027</li>
+              <li>💻 <strong>Core:</strong> React, Node.js, Python, Java</li>
+              <li>✉️ <strong>Email:</strong> samuelmola963@gmail.com</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 border-t border-[var(--border)]">
+      <div class="wrap">
+        <p class="kicker">Expertise</p>
+        <h2 class="h2 text-white">Technical Skills</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Programming Languages</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Java</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">Python</span>
+              <span class="tag">C++</span>
+              <span class="tag">SQL</span>
+            </div>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Frontend & Mobile</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">React</span>
+              <span class="tag">Tailwind CSS</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">React Native</span>
+              <span class="tag">Responsive UI</span>
+            </div>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Backend & APIs</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Node.js</span>
+              <span class="tag">Express</span>
+              <span class="tag">FastAPI</span>
+              <span class="tag">REST APIs</span>
+              <span class="tag">Java Server Sockets</span>
+            </div>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Databases & Cloud</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">SQLite</span>
+              <span class="tag">Database Modeling</span>
+            </div>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Machine Learning</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Scikit-Learn</span>
+              <span class="tag">Pandas</span>
+              <span class="tag">NumPy</span>
+              <span class="tag">Regression & Classification</span>
+            </div>
+          </div>
+          <div class="card space-y-3">
+            <h3 class="font-heading font-bold text-orange-400">Tools & Workflow</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Git</span>
+              <span class="tag">GitHub</span>
+              <span class="tag">GitHub Pages</span>
+              <span class="tag">VS Code</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 border-t border-[var(--border)]" style="background: var(--bg2);">
+      <div class="wrap">
+        <p class="kicker">Work</p>
+        <h2 class="h2 text-white">Featured Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          <!-- Project 1: Lost and Found -->
+          <div class="card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">Completed</span>
+                <span class="text-xs font-mono text-slate-400">Campus Web App</span>
+              </div>
+              <h3 class="text-xl font-heading font-bold text-white mb-2">University Lost and Found</h3>
+              <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                A full-stack campus platform for reporting, searching, and claiming lost student items (ID cards, laptops, keys) with dual-party ownership verification tokens.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="tag">React</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">Node.js</span>
+                <span class="tag">PostgreSQL</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
+              <button onclick="openModal('lostFoundModal')" class="btn btn-primary text-xs flex-1">Try Interactive Demo</button>
+              <a href="https://github.com/samuelmola963/university-lost-and-found" target="_blank" class="btn text-xs">GitHub Repo</a>
+            </div>
+          </div>
+
+          <!-- Project 2: Student Prediction -->
+          <div class="card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">Completed</span>
+                <span class="text-xs font-mono text-slate-400">Machine Learning</span>
+              </div>
+              <h3 class="text-xl font-heading font-bold text-white mb-2">Students Performance Prediction</h3>
+              <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                Machine learning predictive model estimating academic risk and expected GPA based on student attendance, study habits, and assignment engagement.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="tag">Python</span>
+                <span class="tag">Scikit-Learn</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">React</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
+              <button onclick="openModal('studentPredictionModal')" class="btn btn-primary text-xs flex-1">Try ML Simulator</button>
+              <a href="https://github.com/samuelmola963/student-performance-prediction" target="_blank" class="btn text-xs">GitHub Repo</a>
+            </div>
+          </div>
+
+          <!-- Project 3: QR Attendance -->
+          <div class="card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">Completed</span>
+                <span class="text-xs font-mono text-slate-400">Campus Security</span>
+              </div>
+              <h3 class="text-xl font-heading font-bold text-white mb-2">Campus Smart Attendance & QR Verifier</h3>
+              <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                Geofenced rotating QR-code attendance verification system eliminating proxy signatures in university lecture halls.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="tag">React</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">Express</span>
+                <span class="tag">Tailwind CSS</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
+              <a href="https://github.com/samuelmola963/campus-qr-attendance" target="_blank" class="btn text-xs flex-1">View Repository</a>
+            </div>
+          </div>
+
+          <!-- Project 4: Portfolio Website -->
+          <div class="card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">Completed</span>
+                <span class="text-xs font-mono text-slate-400">Web App</span>
+              </div>
+              <h3 class="text-xl font-heading font-bold text-white mb-2">Responsive Personal Portfolio</h3>
+              <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                Modern developer showcase engineered with code-syntax backdrop, live interactive project simulators, and high performance.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                <span class="tag">React</span>
+                <span class="tag">Tailwind CSS</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">GitHub Pages</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-[var(--border)]">
+              <a href="https://github.com/samuelmola963/portfolio" target="_blank" class="btn text-xs flex-1">GitHub Repo</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-16 border-t border-[var(--border)]">
+      <div class="wrap">
+        <p class="kicker">Academics</p>
+        <h2 class="h2 text-white">Education & Coursework</h2>
+        <div class="card space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-4">
+            <div>
+              <h3 class="text-xl font-heading font-bold text-white">BSc in Software Engineering</h3>
+              <p class="text-orange-400 text-sm">University College of Computing & Software Engineering</p>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-[var(--bg2)] px-3 py-1 rounded border border-[var(--border)]">
+              2022 — 2027 (Expected)
+            </span>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-slate-300 mb-2">Key Engineering Coursework:</h4>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag">Data Structures & Algorithms</span>
+              <span class="tag">Database Systems</span>
+              <span class="tag">Object-Oriented Programming</span>
+              <span class="tag">Software Architecture & Testing</span>
+              <span class="tag">Machine Learning</span>
+              <span class="tag">Computer Networking</span>
+              <span class="tag">Security & Distributed Systems</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub Section -->
+    <section id="github" class="py-16 border-t border-[var(--border)]" style="background: var(--bg2);">
+      <div class="wrap">
+        <p class="kicker">Open Source</p>
+        <h2 class="h2 text-white">GitHub Activity</h2>
+        <div class="card flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p class="text-slate-300 text-sm mb-1">
+              Follow my source repositories, university projects, and coding updates:
+            </p>
+            <p class="font-mono text-orange-400 font-bold">@samuelmola963</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="https://github.com/samuelmola963" target="_blank" class="btn btn-primary text-sm">
+              Visit GitHub Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 border-t border-[var(--border)]">
+      <div class="wrap">
+        <p class="kicker">Get in Touch</p>
+        <h2 class="h2 text-white">Contact Samuel</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="card space-y-4">
+            <h3 class="font-heading font-bold text-white text-lg">Direct Contact</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Open to internship opportunities, software engineering roles, and academic collaborations. Feel free to reach out directly:
+            </p>
+            <div class="space-y-2 text-sm text-slate-300">
+              <p>📧 <strong>Email:</strong> <a href="mailto:samuelmola963@gmail.com" class="text-orange-400 underline">samuelmola963@gmail.com</a></p>
+              <p>🐙 <strong>GitHub:</strong> <a href="https://github.com/samuelmola963" target="_blank" class="text-orange-400 underline">github.com/samuelmola963</a></p>
+              <p>💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/samuel-mola" target="_blank" class="text-orange-400 underline">linkedin.com/in/samuel-mola</a></p>
+            </div>
+          </div>
+          <div class="card">
+            <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Your Name</label>
+                <input type="text" required class="w-full bg-[var(--bg2)] border border-[var(--border)] rounded p-2 text-sm text-white focus:outline-none focus:border-orange-500" placeholder="e.g. Abebe Bikila">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Your Email</label>
+                <input type="email" required class="w-full bg-[var(--bg2)] border border-[var(--border)] rounded p-2 text-sm text-white focus:outline-none focus:border-orange-500" placeholder="you@example.com">
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Message</label>
+                <textarea rows="3" required class="w-full bg-[var(--bg2)] border border-[var(--border)] rounded p-2 text-sm text-white focus:outline-none focus:border-orange-500" placeholder="Hi Samuel, I saw your portfolio and..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary w-full text-sm">Send Message</button>
+              <p id="contactStatus" class="text-xs text-center text-emerald-400 hidden">Thank you! Message logged (samuelmola963@gmail.com).</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-8 border-t border-[var(--border)] text-center text-xs text-slate-400" style="background: var(--bg2);">
+    <div class="wrap space-y-2">
+      <p>&copy; 2026 Samuel Mola Gobana. Built with precision for software engineering.</p>
+      <p class="font-mono text-[11px]">BSc Software Engineering · University of Computing</p>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+
+  <!-- Modal 1: Lost and Found Simulator -->
+  <div id="lostFoundModal" class="modal-backdrop" onclick="closeModal('lostFoundModal')">
+    <div class="card w-full max-w-lg p-6 relative" onclick="event.stopPropagation()">
+      <button onclick="closeModal('lostFoundModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white font-mono">✕</button>
+      <p class="kicker">Interactive Simulator</p>
+      <h3 class="font-heading font-bold text-xl text-white mb-2">University Lost and Found</h3>
+      <p class="text-xs text-slate-300 mb-4">Simulate filing a student lost item report:</p>
+      
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="text-xs text-slate-400">Item Name:</label>
+          <input id="lfItem" type="text" value="Student ID Card & Dorm Keys" class="w-full bg-[var(--bg2)] border border-[var(--border)] rounded p-2 text-xs text-white">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400">Campus Location:</label>
+          <select id="lfLocation" class="w-full bg-[var(--bg2)] border border-[var(--border)] rounded p-2 text-xs text-white">
+            <option>Central Library 2nd Floor</option>
+            <option>Computing Complex Lab 3</option>
+            <option>Campus Student Cafeteria</option>
+            <option>Lecture Hall B-102</option>
+          </select>
+        </div>
+        <button onclick="simulateLF()" class="btn btn-primary w-full text-xs">Submit Campus Claim Ticket</button>
+        <div id="lfResult" class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded text-emerald-400 text-xs hidden">
+          ✓ Claim Ticket #LF-9824 registered! Campus Security custodian notified.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Student Prediction Simulator -->
+  <div id="studentPredictionModal" class="modal-backdrop" onclick="closeModal('studentPredictionModal')">
+    <div class="card w-full max-w-lg p-6 relative" onclick="event.stopPropagation()">
+      <button onclick="closeModal('studentPredictionModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white font-mono">✕</button>
+      <p class="kicker">ML Model Simulator</p>
+      <h3 class="font-heading font-bold text-xl text-white mb-2">Student Performance Prediction</h3>
+      <p class="text-xs text-slate-300 mb-4">Adjust study habits to simulate GPA forecast:</p>
+      
+      <div class="space-y-4 text-sm">
+        <div>
+          <div class="flex justify-between text-xs text-slate-300 mb-1">
+            <span>Weekly Study Hours:</span>
+            <span id="studyVal" class="font-bold text-orange-400">24 hrs</span>
+          </div>
+          <input type="range" min="4" max="40" value="24" class="w-full" oninput="updatePrediction()">
+        </div>
+        <div>
+          <div class="flex justify-between text-xs text-slate-300 mb-1">
+            <span>Lecture Attendance (%):</span>
+            <span id="attVal" class="font-bold text-orange-400">92%</span>
+          </div>
+          <input type="range" min="40" max="100" value="92" class="w-full" oninput="updatePrediction()">
+        </div>
+
+        <div class="p-4 bg-[var(--bg2)] rounded border border-[var(--border)] text-center">
+          <p class="text-xs text-slate-400">Predicted Semester GPA:</p>
+          <p id="predGpa" class="text-3xl font-extrabold text-orange-400 font-heading my-1">3.74</p>
+          <p id="predRisk" class="text-xs font-semibold text-emerald-400">Status: Honors Tier (Low Academic Risk)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Resume Modal -->
+  <div id="resumeModal" class="modal-backdrop" onclick="closeModal('resumeModal')">
+    <div class="card w-full max-w-xl p-6 relative" onclick="event.stopPropagation()">
+      <button onclick="closeModal('resumeModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white font-mono">✕</button>
+      <p class="kicker">Curriculum Vitae</p>
+      <h3 class="font-heading font-bold text-2xl text-white mb-1">Samuel Mola Gobana</h3>
+      <p class="text-xs text-orange-400 font-mono mb-4">Software Engineering Student · samuelmola963@gmail.com</p>
+      
+      <div class="space-y-4 text-xs text-slate-300 max-h-96 overflow-y-auto pr-2">
+        <div class="p-3 bg-[var(--bg2)] rounded border border-[var(--border)]">
+          <h4 class="font-bold text-white mb-1">Education</h4>
+          <p>BSc in Software Engineering (2022 – 2027)</p>
+          <p class="text-slate-400">University College of Computing & Software Engineering</p>
+        </div>
+
+        <div class="p-3 bg-[var(--bg2)] rounded border border-[var(--border)]">
+          <h4 class="font-bold text-white mb-1">Highlighted Projects</h4>
+          <p>• <strong>University Lost and Found:</strong> Full-stack campus recovery portal.</p>
+          <p>• <strong>Student Performance Prediction:</strong> Scikit-Learn GPA predictor.</p>
+          <p>• <strong>QR Attendance Verifier:</strong> Geofenced rotating tokens for lecture halls.</p>
+        </div>
+
+        <div class="p-3 bg-[var(--bg2)] rounded border border-[var(--border)]">
+          <h4 class="font-bold text-white mb-1">Technical Stack</h4>
+          <p>Java, JavaScript, TypeScript, Python, C++, SQL, React, Next.js, Node.js, Express, PostgreSQL, Git.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3 pt-3 border-t border-[var(--border)]">
+        <button onclick="window.print()" class="btn text-xs">Print / Save as PDF</button>
+        <button onclick="closeModal('resumeModal')" class="btn btn-primary text-xs">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    // Theme Switcher
+    const themeBtn = document.getElementById('themeBtn');
+    let isDark = true;
+    themeBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        themeBtn.textContent = 'Light';
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeBtn.textContent = 'Dark';
+      }
+    });
+
+    // Modals
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('open');
+    }
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('open');
+    }
+
+    // Lost and Found Demo
+    function simulateLF() {
+      const res = document.getElementById('lfResult');
+      res.classList.remove('hidden');
+    }
+
+    // ML Prediction Simulator
+    function updatePrediction() {
+      const inputs = document.querySelectorAll('#studentPredictionModal input[type="range"]');
+      const study = parseInt(inputs[0].value);
+      const att = parseInt(inputs[1].value);
+
+      document.getElementById('studyVal').textContent = study + ' hrs';
+      document.getElementById('attVal').textContent = att + '%';
+
+      let score = (study / 40) * 2.0 + (att / 100) * 2.0;
+      score = Math.min(4.0, Math.max(1.8, score)).toFixed(2);
+      document.getElementById('predGpa').textContent = score;
+
+      const risk = document.getElementById('predRisk');
+      if (score >= 3.5) {
+        risk.textContent = 'Status: Honors Tier (Low Academic Risk)';
+        risk.className = 'text-xs font-semibold text-emerald-400';
+      } else if (score >= 2.5) {
+        risk.textContent = 'Status: Satisfactory (Moderate Attention)';
+        risk.className = 'text-xs font-semibold text-amber-400';
+      } else {
+        risk.textContent = 'Status: High Academic Risk (Tutoring Advised)';
+        risk.className = 'text-xs font-semibold text-rose-400';
+      }
+    }
+
+    // Contact Form Handler
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contactStatus').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('contactStatus').classList.add('hidden');
+      }, 4000);
+    }
+
+    // Animated Code Matrix Canvas
+    const canvas = document.getElementById('codeCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const codeLines = [
+      'const user = await db.query("SELECT * FROM students WHERE id = $1", [studentId]);',
+      'const prediction = mlModel.predict([[studyHours, attendanceRate]]);',
+      'function verifyOwnership(claimToken, secretAnswer) { return hash(secretAnswer) === token; }',
+      'export const LostAndFound = () => { const [items, setItems] = useState([]); }',
+      'router.post("/api/claims", authenticateToken, async (req, res) => {',
+      'class CampusQRVerifier implements SecurityProvider { generateToken() { ... } }',
+      'SELECT item_id, item_title, custody_status FROM lost_inventory WHERE status = "UNCLAIMED";',
+      'if (student.gpa >= 3.5) { return AcademicStanding.EXCELLENCE; }'
+    ];
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.font = '13px "JetBrains Mono", monospace';
+      ctx.fillStyle = isDark ? '#f97316' : '#ea580c';
+      
+      const step = 45;
+      for (let y = 30, i = 0; y < height; y += step, i++) {
+        const line = codeLines[i % codeLines.length];
+        ctx.fillText(line, 24, y);
+      }
+    }
+    draw();
+    setInterval(draw, 1000);
+  </script>
+</body>
 </html>
 
